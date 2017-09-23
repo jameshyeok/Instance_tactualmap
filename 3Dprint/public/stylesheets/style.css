@@ -1,0 +1,33 @@
+body{
+	padding: 0px;
+	margin: 0px;
+}
+
+#map {
+	width: 80%;
+	height: 960px;
+	float: left;
+}
+
+#banner{
+	width: 100%;
+	height: 100%;
+}
+
+#wrapper{
+	width: 100%;
+	height: 960px;
+	position: absolute;
+}
+
+#sidebar{
+	width: 20%;
+	height: 960px;
+	float: left;
+	background-color: #C9DF8A;
+	padding: 30px;
+}
+
+#btnSTL{
+	float: right;
+}

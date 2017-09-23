@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="/stylesheets/style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="/js/html2canvas.js"></script>
+<script src="/js/canvas2image.js"></script>
+<script src="/js/base64.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=fHrcWVHy6To80PZOOxEI&submodules=geocoder"></script>
+<title>인스턴스 촉지도</title>
+</head>
+<body>
+	<!-- 
+	<form method="post" enctype="multipart/form-data" action="/file-upload">
+		<input type="file" name="img" accept="image/*"> <input
+			type="submit">
+	</form>
+	 -->
+	<img src="/images/banner.png" id="banner">
+	<div id="wrapper">
+		<div id="map">
+		</div>
+		<div id="sidebar">
+			<div class="form-group has-success has-feedback">
+      			<input type="text" class="form-control" id="txtPlace" onfocusout="checkText()" onkeypress="keyHandle(event)" placeholder="지역을 입력하세요.">
+      			<span class="glyphicon form-control-feedback" id="icon"></span>
+    		</div>
+    		<form method="post" action="/file-convert">
+    			<span><button class="btn btn-success" id="btnSTL" >STL Download</button></span>
+			</form>
+		</div>
+	</div>
+	<script>
+		var $map = $('#map'),
+			$btnSTL = $('#btnSTL'),
+			$txtPlace = $('#txtPlace'),
+			$glyphicon = $('#icon');
+		
+		var mapOptions,
+			map;
+		
+		$(document).ready(function(){
+			
+		});
+		
+		$btnSTL.click(function(){
+			<!--
+			html2canvas($map,{
+				logging: true,
+				useCORS: true,
+				onrendered: function(canvas){
+					var img = canvas.toDataURL("image/png");
+					Canvas2Image.saveAsPNG(img);
+					//$data.val(img);
+					//$imgToSver.submit();
+				}
+			});
+			-->
+		});
+		
+		function checkText(){
+			var getTxt = $txtPlace.val();
+			if(getTxt != "")	$glyphicon.addClass('glyphicon-ok');
+			else $glyphicon.removeClass('glyphicon-ok');
+		}
+		
+		function keyHandle(e){
+			// enter key 입력
+			if(e.keyCode == 13){		
+				searchAddressToCoordinate($txtPlace.val());
+				$glyphicon.addClass('glyphicon-ok');
+			} else {
+				$glyphicon.removeClass('glyphicon-ok');
+			}
+		}
+		
+		function searchAddressToCoordinate(address){
+			naver.maps.Service.geocode({
+		        address: address
+		    }, function(status, response) {
+		        if (status === naver.maps.Service.Status.ERROR) {
+		            return alert('Something Wrong!');
+		        }
+
+		        var item = response.result.items[0],
+		        	point = item.point,
+		            latitude = point.y,
+		            longitude = point.x;
+		            
+		        mapOptions = {
+						center : new naver.maps.LatLng(latitude, longitude),
+						zoom : 10,
+						mapTypeControl: true
+					};
+				map = new naver.maps.Map( 'map', mapOptions);
+		    });
+		}
+	</script>
+</body>
+</html>
